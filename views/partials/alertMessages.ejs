@@ -1,0 +1,16 @@
+<% if(success_msg != '' ) { %>
+  <div class="alert p-2 alert-success" role="alert">
+    <p class="mb-0"><%= success_msg %></p>
+  </div>
+<% } %>
+
+<% if(error_msg != '' ) { %>
+  <div class="alert p-2 alert-danger" role="alert">
+    <p class="mb-0"><%= error_msg %></p>
+  </div>
+<% } %>
+
+<% if(error != '' ) { %>
+  <div class="alert p-2 alert-danger" role="alert">
+    <p class="mb-0"><%= error %></p>
+<% } %>

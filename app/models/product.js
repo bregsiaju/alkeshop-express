@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     price: DataTypes.INTEGER,
     description: DataTypes.TEXT,
     productCategory: DataTypes.INTEGER,
-    stock: DataTypes.INTEGER
+    stock: DataTypes.INTEGER,
+    status: DataTypes.ENUM('active', 'archived')
   }, {
     sequelize,
     modelName: 'Product',

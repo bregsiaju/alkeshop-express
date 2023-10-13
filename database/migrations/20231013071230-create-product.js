@@ -32,6 +32,9 @@ module.exports = {
       stock: {
         type: Sequelize.INTEGER
       },
+      status: {
+        type: Sequelize.ENUM('active', 'archived')
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

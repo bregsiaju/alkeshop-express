@@ -26,11 +26,11 @@ module.exports = {
       phone: {
         type: Sequelize.STRING
       },
-      birth_date: {
+      birthDate: {
         type: Sequelize.DATEONLY
       },
       gender: {
-        type: Sequelize.ENUM('Wanita', 'Pria')
+        type: Sequelize.ENUM('Perempuan', 'Laki-Laki')
       },
       address: {
         type: Sequelize.TEXT
