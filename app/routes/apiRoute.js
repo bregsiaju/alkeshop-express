@@ -6,6 +6,7 @@ const isAdmin = require('../middleware/isAdmin')
 const { login, register } = require('../controllers/api/authController')
 const { getCategories, getCategoryById, addCategory, updateCategory, deleteCategory } = require('../controllers/api/categoryController')
 const { getProducts, getProductById, addProduct, updateProduct, deleteProduct, searchProduct } = require('../controllers/api/productController')
+const { getCart, addCart, updateDetailCart, removeProductOnCart } = require('../controllers/api/cartController')
 
 // AUTH ENDPOINTS
 route.post('/api/login', login)
@@ -25,5 +26,11 @@ route.post('/api/products', isAuth, isAdmin, upload.single('image'), addProduct)
 route.put('/api/products/:id', isAuth, isAdmin, upload.single('image'), updateProduct)
 route.delete('/api/products/:id', isAuth, isAdmin, deleteProduct)
 route.get('/api/search-product', searchProduct)
+
+// CART ENDPOINTS
+route.get('/api/carts', isAuth, getCart)
+route.post('/api/carts', isAuth, addCart)
+route.put('/api/carts', isAuth, updateDetailCart)
+route.delete('/api/carts/:productId', isAuth, removeProductOnCart)
 
 module.exports = route
