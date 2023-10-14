@@ -1,6 +1,7 @@
 const { Product, Category } = require('../../models')
 const imagekit = require('../../../lib/imageKit')
 const ApiError = require('../../utils/ApiError')
+const { Op } = require('sequelize')
 
 const addProduct = async (req, res) => {
   const { file } = req
@@ -157,4 +158,27 @@ const deleteProduct = async (req, res) => {
   }
 }
 
-module.exports = { addProduct, getProducts, getProductById, updateProduct, deleteProduct }
+const searchProduct = async (req, res) => {
+  try {
+    const search = req.query.search || '';
+    const products = await Product.findAll({
+      where: {
+        productName: {
+          [Op.like]: '%' + search + '%',
+        }
+      },
+      include: [
+        { model: Category }
+      ]
+    })
+    res.status(200).json({
+      data: products
+    })
+  } catch (error) {
+    res.status(error.statusCode || 500).json({
+      message: error.message,
+    })
+  }
+}
+
+module.exports = { addProduct, getProducts, getProductById, updateProduct, deleteProduct, searchProduct }
