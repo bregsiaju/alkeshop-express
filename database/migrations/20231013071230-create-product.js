@@ -33,7 +33,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       status: {
-        type: Sequelize.ENUM('active', 'archived')
+        type: Sequelize.ENUM('active', 'archived'),
+        defaultValue: 'active'
       },
       createdAt: {
         allowNull: false,

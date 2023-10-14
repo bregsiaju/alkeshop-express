@@ -1,8 +1,8 @@
 const route = require('express').Router()
-const authRoute = require('./authRoute')
+const apiRoute = require('./apiRoute')
 const pagesRoute = require('./pagesRoute')
 
-route.use(authRoute)
+route.use(apiRoute)
 route.use(pagesRoute)
 
 module.exports = route

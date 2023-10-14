@@ -8,7 +8,7 @@ const isAdmin = async (req, res, next) => {
   } catch (err) {
     res.status(403).json({
       status: 'failed',
-      message: 'hanya bisa diakses oleh admin',
+      message: 'Hanya bisa diakses oleh admin',
     });
   }
 };

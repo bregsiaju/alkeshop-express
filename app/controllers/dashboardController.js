@@ -3,16 +3,16 @@ const { User } = require('../models')
 
 const login = async (req, res) => {
   try {
-    const { username = '', password = ''} = req.body
+    const { username = '', password = '' } = req.body
 
     const login = await Axios.post('/login', { username, password })
-    console.log(login)
+    // console.log(login)
 
     if (login.status === 200) {
       // generate session
       req.session.regenerate(function (err) {
         if (err) next(err)
-    
+
         // store user information in session, typically a user id
         req.session.user = login.data.user
         req.session.save(function (err) {
@@ -32,8 +32,8 @@ const login = async (req, res) => {
 const loadDashboard = async (req, res) => {
   try {
     const id = req.session.user
-    const user = await User.findOne({ where: { id }})
-    console.log(req.session)
+    const user = await User.findOne({ where: { id } })
+    // console.log(req.session)
     res.render('dashboard', {
       user: user.fullName,
       pathname: '/dashboard',
