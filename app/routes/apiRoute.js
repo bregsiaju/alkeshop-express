@@ -7,6 +7,7 @@ const { login, register } = require('../controllers/api/authController')
 const { getCategories, getCategoryById, addCategory, updateCategory, deleteCategory } = require('../controllers/api/categoryController')
 const { getProducts, getProductById, addProduct, updateProduct, deleteProduct, searchProduct } = require('../controllers/api/productController')
 const { getCart, addCart, updateDetailCart, removeProductOnCart } = require('../controllers/api/cartController')
+const { addTransaction, getAllTransaction, getDetailTrans, updateTrans, deleteTrans, cancelOrder } = require('../controllers/api/transactionController')
 
 // AUTH ENDPOINTS
 route.post('/api/login', login)
@@ -32,5 +33,13 @@ route.get('/api/carts', isAuth, getCart)
 route.post('/api/carts', isAuth, addCart)
 route.put('/api/carts', isAuth, updateDetailCart)
 route.delete('/api/carts/:productId', isAuth, removeProductOnCart)
+
+// TRANSACTION/ORDER PRODUCT ENDPOINTS
+route.post('/api/checkout', isAuth, addTransaction)
+route.get('/api/transactions', isAuth, getAllTransaction) // berdasarkan user
+route.get('/api/transactions/:id', isAuth, getDetailTrans)
+route.put('/api/update-status/:id', isAuth, updateTrans)
+route.put('/api/cancel-order/:id', isAuth, cancelOrder)
+route.delete('/api/transactions/:id', isAuth, isAdmin, deleteTrans)
 
 module.exports = route

@@ -30,7 +30,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       statusOrder: {
-        type: Sequelize.STRING
+        type: Sequelize.ENUM('Menunggu Pembayaran', 'Diproses', 'Dikirim', 'Selesai', 'Dibatalkan')
       },
       createdAt: {
         allowNull: false,

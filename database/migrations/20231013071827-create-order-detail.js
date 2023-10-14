@@ -14,22 +14,18 @@ module.exports = {
         references: {
           model: 'Transactions',
           key: 'id'
-        }
+        },
+        onDelete: 'cASCADE'
       },
       productId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Products',
           key: 'id'
-        }
+        },
+        onDelete: 'NO ACTION'
       },
       quantity: {
-        type: Sequelize.INTEGER
-      },
-      price: {
-        type: Sequelize.INTEGER
-      },
-      subtotal: {
         type: Sequelize.INTEGER
       },
       createdAt: {

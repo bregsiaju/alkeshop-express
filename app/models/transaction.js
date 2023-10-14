@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     paymentMethod: DataTypes.INTEGER,
     totalPrice: DataTypes.INTEGER,
-    statusOrder: DataTypes.STRING
+    statusOrder: DataTypes.ENUM('Menunggu Pembayaran', 'Diproses', 'Dikirim', 'Selesai', 'Dibatalkan')
   }, {
     sequelize,
     modelName: 'Transaction',
