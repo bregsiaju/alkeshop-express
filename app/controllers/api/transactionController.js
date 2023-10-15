@@ -1,4 +1,7 @@
-const { Transaction, Product, Payment, OrderDetail } = require('../../models')
+const fs = require('fs');
+const sendMail = require('../../../lib/nodemailer');
+const generateInvoice = require('../../../lib/pdfkit');
+const { Transaction, Product, Payment, OrderDetail, User } = require('../../models')
 const ApiError = require('../../utils/ApiError')
 
 const generateTransNo = () => {
@@ -89,8 +92,8 @@ const updateTrans = async (req, res) => {
   const { id } = req.params
   const { status } = req.body
   try {
-    const category = await Transaction.findOne({ where: { id } })
-    if (!category) throw new ApiError(404, `Transaksi dengan id ${id} tidak ditemukan`)
+    const trans = await Transaction.findOne({ where: { id } })
+    if (!trans) throw new ApiError(404, `Transaksi dengan id ${id} tidak ditemukan`)
 
     await Transaction.update({
       statusOrder: status
@@ -151,4 +154,81 @@ const cancelOrder = async (req, res) => {
   }
 }
 
-module.exports = { addTransaction, getAllTransaction, getDetailTrans, updateTrans, deleteTrans, cancelOrder }
+const sendInvoice = async (req, res) => {
+  const userId = req.user.id
+  const { transId } = req.params
+  try {
+    const trans = await Transaction.findOne({ where: { id: transId } })
+    if (!trans) throw new ApiError(404, `Transaksi dengan id ${transId} tidak ditemukan`)
+
+    const getUser = await User.findOne({ where: { id: userId } })
+    const userEmail = getUser.email
+    console.log(userEmail)
+
+    const getProducts = await OrderDetail.findAll({
+      where: { transactionId: transId },
+      include: [
+        { model: Product },
+        {
+          model: Transaction,
+          include: [{
+            model: Payment
+          }]
+        }
+      ]
+    })
+    // generate pdf
+    const generatedPDF = generateInvoice(getProducts, getUser, trans)
+    console.log(generatedPDF)
+
+    // buat penyimpanan file sementara
+    if (!fs.existsSync('temp_invoice.pdf')) {
+      fs.mkdirSync('temp_invoice.pdf');
+    }
+    const tempFilePath = 'temp_invoice.pdf'
+    generatedPDF.pipe(fs.createWriteStream(tempFilePath))
+    generatedPDF.end()
+
+    // kirim melalui email
+    const email = {
+      EMAIL: userEmail,
+      subject: 'Invoice Pembelian <Alkeshop>',
+      text: 'Terlampir adalah invoice transaksi pembelian Anda.',
+      attachments: [
+        {
+          filename: 'invoice.pdf',
+          content: fs.readFileSync(tempFilePath, { encoding: 'base64' }), // Gunakan PDF yang dihasilkan dari generateInvoice()
+          encoding: 'base64'
+        }
+      ]
+    }
+    sendMail(email)
+
+    // Setelah email terkirim, hapus file sementara PDF
+    fs.unlink(tempFilePath, (err) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log('File PDF sementara dihapus.');
+    });
+
+    res.status(200).json({
+      message: 'Selamat, pembelian siap diproses!',
+    });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({
+      message: error.message,
+    })
+  }
+}
+
+module.exports = {
+  addTransaction,
+  getAllTransaction,
+  getDetailTrans,
+  updateTrans,
+  deleteTrans,
+  cancelOrder,
+  sendInvoice
+}
