@@ -32,6 +32,22 @@ module.exports = {
       statusOrder: {
         type: Sequelize.ENUM('Menunggu Pembayaran', 'Diproses', 'Dikirim', 'Selesai', 'Dibatalkan')
       },
+      recipient: {
+        type: Sequelize.STRING
+      },
+      address: {
+        type: Sequelize.TEXT
+      },
+      zipCode: {
+        type: Sequelize.STRING
+      },
+      city: {
+        type: Sequelize.STRING
+      },
+      country: {
+        type: Sequelize.STRING,
+        defaultValue: 'Indonesia'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

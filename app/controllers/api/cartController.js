@@ -25,7 +25,7 @@ const addCart = async (req, res) => {
       console.log(`sudah adaa ${productExist}`)
       console.log(productExist.quantity)
       await CartDetail.update({
-        quantity: productExist.quantity + 1
+        quantity: productExist.quantity + quantity
       }, {
         where: {
           [Op.and]: [{ productId }, { cartId }]
@@ -65,7 +65,7 @@ const getCart = async (req, res) => {
       })
     } else {
       const cartId = cart.id
-      const detailCart = await CartDetail.findAndCountAll({
+      const detailCart = await CartDetail.findAll({
         where: { cartId },
         include: [
           { model: Product }
@@ -133,7 +133,7 @@ const removeProductOnCart = async (req, res) => {
       }
     })
     res.status(200).json({
-      message: 'Kategori berhasil dihapus',
+      message: 'Produk berhasil dihapus dari keranjang',
     })
   } catch (error) {
     res.status(error.statusCode || 500).json({

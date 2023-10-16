@@ -3,7 +3,7 @@ const upload = require('../middleware/uploader')
 
 const isAuth = require('../middleware/isAuth')
 const isAdmin = require('../middleware/isAdmin')
-const { login, register } = require('../controllers/api/authController')
+const { login, register, getProfile } = require('../controllers/api/authController')
 const { getCategories, getCategoryById, addCategory, updateCategory, deleteCategory } = require('../controllers/api/categoryController')
 const { getProducts, getProductById, addProduct, updateProduct, deleteProduct, searchProduct } = require('../controllers/api/productController')
 const { getCart, addCart, updateDetailCart, removeProductOnCart } = require('../controllers/api/cartController')
@@ -12,6 +12,7 @@ const { addTransaction, getAllTransaction, getDetailTrans, updateTrans, deleteTr
 // AUTH ENDPOINTS
 route.post('/api/login', login)
 route.post('/api/register', register)
+route.get('/api/current-user', isAuth, getProfile)
 
 // CATEGORY PRODUCT ENDPOINTS
 route.get('/api/categories', getCategories)

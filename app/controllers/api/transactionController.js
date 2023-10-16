@@ -1,25 +1,29 @@
 const fs = require('fs');
 const sendMail = require('../../../lib/nodemailer');
 const generateInvoice = require('../../../lib/pdfkit');
-const { Transaction, Product, Payment, OrderDetail, User } = require('../../models')
-const ApiError = require('../../utils/ApiError')
+const { Transaction, Product, Payment, OrderDetail, User, CartDetail, Cart } = require('../../models')
+const ApiError = require('../../utils/ApiError');
+const { Op } = require('sequelize');
 
 const generateTransNo = () => {
   const randomThreeDigits = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
   const currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, '');
 
-  return `AST${randomThreeDigits}${currentDate}`;
+  return `#AST${randomThreeDigits}${currentDate}`;
 }
 
 const addTransaction = async (req, res) => {
   const userId = req.user.id
+  const { paymentMethod, totalPrice, products } = req.body
   try {
-    const { paymentMethod, totalPrice, products } = req.body
+    const checkCart = await Cart.findOne({ where: { userId } })
+    const cartId = checkCart?.id
 
     const getStatus = paymentMethod === 1 ? 'Diproses' : 'Menunggu Pembayaran'
 
     const transNo = generateTransNo()
     const newTransaction = await Transaction.create({
+      ...req.body,
       userId,
       transNo,
       paymentMethod,
@@ -31,8 +35,21 @@ const addTransaction = async (req, res) => {
     products.map(async (product) => {
       await OrderDetail.create({
         transactionId: newTransaction.id,
-        productId: product.id,
+        productId: product.productId,
         quantity: product.quantity
+      })
+
+      const getQTY = await Product.findByPk(product.id)
+      const afterSale = getQTY - product.quantity
+      await Product.update({
+        quantity: afterSale
+      }, { where: { id: product.productId } })
+
+      // hapus dari keranjang
+      await CartDetail.destroy({
+        where: {
+          [Op.and]: [{ productId: product.productId }, { cartId }]
+        }
       })
     })
 
@@ -154,16 +171,39 @@ const cancelOrder = async (req, res) => {
   }
 }
 
+// fungsi untuk menyimpan pdf ke file
+function savePdfToFile(pdf, fileName) {
+  return new Promise((resolve, reject) => {
+    let pendingStepCount = 2;
+
+    const stepFinished = () => {
+      if (--pendingStepCount == 0) {
+        resolve();
+      }
+    };
+
+    const writeStream = fs.createWriteStream(fileName);
+    writeStream.on('close', stepFinished);
+    pdf.pipe(writeStream);
+
+    pdf.end();
+
+    stepFinished();
+  });
+}
+
+
 const sendInvoice = async (req, res) => {
   const userId = req.user.id
   const { transId } = req.params
   try {
-    const trans = await Transaction.findOne({ where: { id: transId } })
+    const trans = await Transaction.findOne({ where: {
+      [Op.and]: [{ id: transId }, { userId }]
+    } })
     if (!trans) throw new ApiError(404, `Transaksi dengan id ${transId} tidak ditemukan`)
 
     const getUser = await User.findOne({ where: { id: userId } })
     const userEmail = getUser.email
-    console.log(userEmail)
 
     const getProducts = await OrderDetail.findAll({
       where: { transactionId: transId },
@@ -179,20 +219,16 @@ const sendInvoice = async (req, res) => {
     })
     // generate pdf
     const generatedPDF = generateInvoice(getProducts, getUser, trans)
-    console.log(generatedPDF)
+    console.log('berhasil bikin pdf')
 
     // buat penyimpanan file sementara
-    if (!fs.existsSync('temp_invoice.pdf')) {
-      fs.mkdirSync('temp_invoice.pdf');
-    }
     const tempFilePath = 'temp_invoice.pdf'
-    generatedPDF.pipe(fs.createWriteStream(tempFilePath))
-    generatedPDF.end()
+    await savePdfToFile(generatedPDF, tempFilePath);
 
     // kirim melalui email
     const email = {
       EMAIL: userEmail,
-      subject: 'Invoice Pembelian <Alkeshop>',
+      subject: 'Invoice Pembelian',
       text: 'Terlampir adalah invoice transaksi pembelian Anda.',
       attachments: [
         {
@@ -203,6 +239,7 @@ const sendInvoice = async (req, res) => {
       ]
     }
     sendMail(email)
+    console.log('bersharil kirim email');
 
     // Setelah email terkirim, hapus file sementara PDF
     fs.unlink(tempFilePath, (err) => {

@@ -11,7 +11,7 @@ const login = async (req, res) => {
     const user = await User.findOne({ where: { username } })
     console.log(user)
     // validasi
-    if (!user) throw new ApiError(400, 'Email tidak terdaftar.')
+    if (!user) throw new ApiError(400, 'Username tidak terdaftar.')
     if (!bcrypt.compareSync(password, user.password)) {
       throw new ApiError(400, 'Password salah.')
     }
@@ -83,4 +83,18 @@ const register = async (req, res) => {
   }
 };
 
-module.exports = { login, register }
+const getProfile = async (req, res) => {
+  const userId = req.user.id
+  try {
+    const getUser = await User.findByPk(userId)
+    res.status(200).json({
+      data: getUser
+    });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({
+      message: error.message,
+    })
+  }
+}
+
+module.exports = { login, register, getProfile }
