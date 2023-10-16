@@ -181,4 +181,30 @@ const searchProduct = async (req, res) => {
   }
 }
 
-module.exports = { addProduct, getProducts, getProductById, updateProduct, deleteProduct, searchProduct }
+const filterByCategory = async (req, res) => {
+  const catId = req.params.catId
+  try {
+    const products = await Product.findAll({
+      where: {
+        productCategory: catId
+      }
+    })
+    res.status(200).json({
+      data: products
+    })
+  } catch (error) {
+    res.status(error.statusCode || 500).json({
+      message: error.message,
+    })
+  }
+}
+
+module.exports = {
+  addProduct,
+  getProducts,
+  getProductById,
+  filterByCategory,
+  updateProduct,
+  deleteProduct,
+  searchProduct
+}

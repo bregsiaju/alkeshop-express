@@ -26,6 +26,9 @@ module.exports = {
           key: 'id'
         }
       },
+      totalItems: {
+        type: Sequelize.INTEGER
+      },
       totalPrice: {
         type: Sequelize.INTEGER
       },

@@ -42,7 +42,7 @@ const addTransaction = async (req, res) => {
       const getQTY = await Product.findByPk(product.id)
       const afterSale = getQTY - product.quantity
       await Product.update({
-        quantity: afterSale
+        stock: afterSale
       }, { where: { id: product.productId } })
 
       // hapus dari keranjang
@@ -119,6 +119,28 @@ const updateTrans = async (req, res) => {
     })
     res.status(200).json({
       message: 'Status pesanan berhasil diubah',
+    })
+  } catch (error) {
+    res.status(error.statusCode || 500).json({
+      message: error.message,
+    })
+  }
+}
+
+const payTransaction = async (req, res) => {
+  const { id } = req.params
+  const { status } = req.body
+  try {
+    const trans = await Transaction.findOne({ where: { id } })
+    if (!trans) throw new ApiError(404, `Transaksi dengan id ${id} tidak ditemukan`)
+
+    await Transaction.update({
+      statusOrder: status
+    }, {
+      where: { id }
+    })
+    res.status(200).json({
+      message: 'Pembayaran berhasil',
     })
   } catch (error) {
     res.status(error.statusCode || 500).json({
@@ -219,7 +241,7 @@ const sendInvoice = async (req, res) => {
     })
     // generate pdf
     const generatedPDF = generateInvoice(getProducts, getUser, trans)
-    console.log('berhasil bikin pdf')
+    // console.log('berhasil bikin pdf')
 
     // buat penyimpanan file sementara
     const tempFilePath = 'temp_invoice.pdf'
@@ -239,7 +261,7 @@ const sendInvoice = async (req, res) => {
       ]
     }
     sendMail(email)
-    console.log('bersharil kirim email');
+    // console.log('bersharil kirim email');
 
     // Setelah email terkirim, hapus file sementara PDF
     fs.unlink(tempFilePath, (err) => {
@@ -247,7 +269,7 @@ const sendInvoice = async (req, res) => {
         console.error(err);
         return;
       }
-      console.log('File PDF sementara dihapus.');
+      // console.log('File PDF sementara dihapus.');
     });
 
     res.status(200).json({
@@ -265,6 +287,7 @@ module.exports = {
   getAllTransaction,
   getDetailTrans,
   updateTrans,
+  payTransaction,
   deleteTrans,
   cancelOrder,
   sendInvoice
