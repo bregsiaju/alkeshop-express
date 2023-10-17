@@ -9,10 +9,10 @@ const addCart = async (req, res) => {
   try {
     const checkCart = await Cart.findOne({ where: { userId } })
     const cartId = checkCart?.id || null
-    console.log(`adfda ${cartId}`)
+    // console.log(`adfda ${cartId}`)
     if (!checkCart) {
       var createCart = await Cart.create({ userId })
-      console.log(`buat cart ${createCart}`)
+      // console.log(`buat cart ${createCart}`)
     }
 
     const productExist = await CartDetail.findOne({
@@ -22,8 +22,8 @@ const addCart = async (req, res) => {
     })
 
     if (productExist) {
-      console.log(`sudah adaa ${productExist}`)
-      console.log(productExist.quantity)
+      // console.log(`sudah adaa ${productExist}`)
+      // console.log(productExist.quantity)
       await CartDetail.update({
         quantity: productExist.quantity + quantity
       }, {
@@ -54,10 +54,10 @@ const addCart = async (req, res) => {
 
 const getCart = async (req, res) => {
   const userId = req.user.id
-  console.log(userId)
+  // console.log(userId)
   try {
     const cart = await Cart.findOne({ where: { userId } })
-    console.log(cart)
+    // console.log(cart)
     if (!cart) {
       res.status(200).json({
         message: 'Keranjang masih kosong',

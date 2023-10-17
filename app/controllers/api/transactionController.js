@@ -219,9 +219,11 @@ const sendInvoice = async (req, res) => {
   const userId = req.user.id
   const { transId } = req.params
   try {
-    const trans = await Transaction.findOne({ where: {
-      [Op.and]: [{ id: transId }, { userId }]
-    } })
+    const trans = await Transaction.findOne({
+      where: {
+        [Op.and]: [{ id: transId }, { userId }]
+      }
+    })
     if (!trans) throw new ApiError(404, `Transaksi dengan id ${transId} tidak ditemukan`)
 
     const getUser = await User.findOne({ where: { id: userId } })

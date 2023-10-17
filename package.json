@@ -30,6 +30,7 @@
     "pdfkit": "^0.13.0",
     "pdfkit-table": "^0.1.99",
     "sequelize": "^6.33.0",
-    "sequelize-cli": "^6.6.1"
+    "sequelize-cli": "^6.6.1",
+    "v8": "^0.1.0"
   }
 }

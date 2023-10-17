@@ -5,11 +5,12 @@ const { User } = require('../../models')
 const ApiError = require('../../utils/ApiError')
 dotenv.config();
 
+// login
 const login = async (req, res) => {
   try {
     const { username = '', password = '', } = req.body
     const user = await User.findOne({ where: { username } })
-    console.log(user)
+    // console.log(user)
     // validasi
     if (!user) throw new ApiError(400, 'Username tidak terdaftar.')
     if (!bcrypt.compareSync(password, user.password)) {
@@ -37,6 +38,7 @@ const login = async (req, res) => {
   }
 }
 
+// Daftar Akun
 const register = async (req, res) => {
   try {
     const {
@@ -48,7 +50,7 @@ const register = async (req, res) => {
     const checkUsername = await User.findOne({ where: { username } });
     const checkEmail = await User.findOne({ where: { email } })
 
-    // validasi
+    // validasi data form
     if (!password) throw new ApiError(400, 'Password tidak boleh kosong.');
     if (!username) throw new ApiError(400, 'Username tidak boleh kosong.');
     if (checkUsername) throw new ApiError(400, 'Username telah digunakan.');
@@ -83,6 +85,7 @@ const register = async (req, res) => {
   }
 };
 
+// mendapatkan data user yang sedang login
 const getProfile = async (req, res) => {
   const userId = req.user.id
   try {
