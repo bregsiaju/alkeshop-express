@@ -1,4 +1,5 @@
 const route = require('express').Router()
+const { getCategory } = require('../controllers/CategoryPageController')
 const { login, logout, loadDashboard } = require('../controllers/dashboardController')
 const isLoggedin = require('../middleware/isLoggedin')
 
@@ -11,10 +12,6 @@ route.get('/dashboard', isLoggedin, loadDashboard)
 route.get('/logout', isLoggedin, logout)
 
 // CATEGORY PRODUCT
-route.get('/kategori', isLoggedin, (req, res) => {
-  res.render('category', {
-    user: 2
-  })
-})
+route.get('/category', isLoggedin, getCategory)
 
 module.exports = route
