@@ -14,8 +14,8 @@ const addCart = async (req, res) => {
       var createCart = await Cart.create({ userId })
     }
 
-    const checkStock = await Product.findOne({ where: { productId } })
-    if (checkStock?.stock === 0) throw new ApiError(405, `Stok produk sedang kosong`)
+    const checkStock = await Product.findOne({ where: { id: productId } })
+    if (checkStock?.stock <= 0) throw new ApiError(405, `Stok produk sedang kosong`)
 
     const productExist = await CartDetail.findOne({
       where: {
