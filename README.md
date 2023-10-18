@@ -11,8 +11,14 @@ $ npm install
 $ sequelize db:create
 
 # migrate db
-$ sequelize db:migrate
+$ npx sequelize-cli db:migrate
+
+# seed data to db
+$ npx sequelize-cli db:seed:all
 
 # serve with hot reload at localhost:8000
 $ npm start
+
+# access admin page
+$ http://localhost:8000
 ```

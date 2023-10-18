@@ -9,11 +9,13 @@ const addCart = async (req, res) => {
   try {
     const checkCart = await Cart.findOne({ where: { userId } })
     const cartId = checkCart?.id || null
-    // console.log(`adfda ${cartId}`)
+
     if (!checkCart) {
       var createCart = await Cart.create({ userId })
-      // console.log(`buat cart ${createCart}`)
     }
+
+    const checkStock = await Product.findOne({ where: { productId } })
+    if (checkStock?.stock === 0) throw new ApiError(405, `Stok produk sedang kosong`)
 
     const productExist = await CartDetail.findOne({
       where: {
@@ -21,9 +23,8 @@ const addCart = async (req, res) => {
       }
     })
 
+    // ketika produk sudah ada di-cart -> hanya menambah kuantitas
     if (productExist) {
-      // console.log(`sudah adaa ${productExist}`)
-      // console.log(productExist.quantity)
       await CartDetail.update({
         quantity: productExist.quantity + quantity
       }, {
