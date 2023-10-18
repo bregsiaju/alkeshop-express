@@ -7,6 +7,11 @@ alkeshop-express: RESTful API
 # install dependencies
 $ npm install
 
+# database
+$ import database alkeshop.sql to phpmyadmin
+
+OR
+
 # create db
 $ sequelize db:create
 
@@ -18,7 +23,10 @@ $ npx sequelize-cli db:seed:all
 
 # serve with hot reload at localhost:8000
 $ npm start
+```
 
+## Data Admin
+```
 # access admin page
 $ http://localhost:8000
 
