@@ -18,11 +18,7 @@ Axios.interceptors.response.use(
       throw err;
     }
 
-    if (typeof err.response.data.error.name !== "undefined") {
-      if (err.response.data.error.name === "TokenExpiredError") {
-        throw err;
-      }
-    }
+    console.log(err)
   }
 );
 

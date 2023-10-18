@@ -275,3 +275,7 @@
   background: var(--dark);
   border-color: var(--primary);
 }
+
+.no-wrap {
+  white-space: nowrap;
+}

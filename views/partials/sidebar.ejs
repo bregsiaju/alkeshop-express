@@ -1,40 +1,40 @@
-    <!-- Sidebar Start -->
-    <div class="sidebar pe-4 pb-3">
-      <nav class="navbar bg-light navbar-light">
-        <a href="/dashboard" class="navbar-brand mx-4 mb-3">
-          <h3 class="text-primary"></i>Alkeshop</h3>
-        </a>
-        <div class="d-flex align-items-center ms-4 mb-4">
-          <div class="position-relative">
-            <img class="rounded-circle" src="/image/user.jpg" alt="" style="width: 40px; height: 40px;">
-            <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
-            </div>
-          </div>
-          <div class="ms-3">
-            <h6 class="mb-0"><%= user %></h6>
-            <span>Admin</span>
-          </div>
+<!-- Sidebar Start -->
+<div class="sidebar pe-4 pb-3">
+  <nav class="navbar bg-light navbar-light">
+    <a href="/dashboard" class="navbar-brand mx-4 mb-3">
+      <h3 class="text-primary"></i>Alkeshop</h3>
+    </a>
+    <div class="d-flex align-items-center ms-4 mb-4">
+      <div class="position-relative">
+        <img class="rounded-circle" src="/image/photo.jpeg" alt="" style="width: 40px; height: 40px;">
+        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
         </div>
-        <div class="navbar-nav w-100">
-          <a href="/dashboard" class="nav-item nav-link <%= pathname == '/dashboard' ? 'active' : '' %>">
-            <i class="fa fa-tachometer-alt me-2"></i>Dashboard
-          </a>
-          <a href="/category" class="nav-item nav-link <%= pathname == '/category' ? 'active' : '' %>"">
-            <i class="fa fa-th me-2"></i>Kategori Produk
-          </a>
-          <a href="/produk" class="nav-item nav-link <%= pathname == '/produk' ? 'active' : '' %>"">
-            <i class="fa fa-syringe me-2"></i>Kelola Produk
-          </a>
-          <a href="/penjualan" class="nav-item nav-link <%= pathname == '/penjualan' ? 'active' : '' %>"">
-            <i class="fa fa-chart-bar me-2"></i>Penjualan
-          </a>
-          <a href="/ulasan" class="nav-item nav-link <%= pathname == '/ulasan' ? 'active' : '' %>"">
+      </div>
+      <div class="ms-3">
+        <h6 class="mb-0"><%= user %></h6>
+        <span>Admin</span>
+      </div>
+    </div>
+    <div class="navbar-nav w-100">
+      <a href="/dashboard" class="nav-item nav-link <%= pathname == '/dashboard' ? 'active' : '' %>">
+        <i class="fa fa-tachometer-alt me-2"></i>Dashboard
+      </a>
+      <a href="/category" class="nav-item nav-link <%= pathname == '/category' ? 'active' : '' %>"">
+            <i class=" fa fa-th me-2"></i>Kategori Produk
+      </a>
+      <a href="/products" class="nav-item nav-link <%= pathname == '/products' ? 'active' : '' %>"">
+            <i class=" fa fa-syringe me-2"></i>Kelola Produk
+      </a>
+      <a href="/sales" class="nav-item nav-link <%= pathname == '/sales' ? 'active' : '' %>"">
+            <i class=" fa fa-chart-bar me-2"></i>Penjualan
+      </a>
+      <!-- <a href="/ulasan" class="nav-item nav-link <%= pathname == '/ulasan' ? 'active' : '' %>"">
             <i class="fa fa-star me-2"></i>Ulasan
           </a>
           <a href="/customer" class="nav-item nav-link <%= pathname == '/customer' ? 'active' : '' %>"">
             <i class="fa fa-user me-2"></i>Customer
-          </a>
-        </div>
-      </nav>
+          </a> -->
     </div>
-    <!-- Sidebar End -->
+  </nav>
+</div>
+<!-- Sidebar End -->

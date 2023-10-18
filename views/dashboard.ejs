@@ -32,7 +32,7 @@
               <i class="fa fa-chart-line fa-3x text-primary"></i>
               <div class="ms-3">
                 <p class="mb-2">Today Sale</p>
-                <h6 class="mb-0">$1234</h6>
+                <h6 class="mb-0"><%= data.todaySales === null ? '0' : data.todaySales %></h6>
               </div>
             </div>
           </div>
@@ -41,7 +41,7 @@
               <i class="fa fa-chart-bar fa-3x text-primary"></i>
               <div class="ms-3">
                 <p class="mb-2">Total Sale</p>
-                <h6 class="mb-0">$1234</h6>
+                <h6 class="mb-0"><%= data.totalSales %></h6>
               </div>
             </div>
           </div>
@@ -50,7 +50,7 @@
               <i class="fa fa-chart-area fa-3x text-primary"></i>
               <div class="ms-3">
                 <p class="mb-2">Today Revenue</p>
-                <h6 class="mb-0">$1234</h6>
+                <h6 class="mb-0">Rp<%= data.todayRevenue === null ? '0' : helper.setCurrency(data.todayRevenue) %></h6>
               </div>
             </div>
           </div>
@@ -59,7 +59,7 @@
               <i class="fa fa-chart-pie fa-3x text-primary"></i>
               <div class="ms-3">
                 <p class="mb-2">Total Revenue</p>
-                <h6 class="mb-0">$1234</h6>
+                <h6 class="mb-0">Rp<%= helper.setCurrency(data.totalRevenue) %></h6>
               </div>
             </div>
           </div>
@@ -71,8 +71,8 @@
       <div class="container-fluid pt-4 px-4">
         <div class="bg-light text-center rounded p-4">
           <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">Recent Salse</h6>
-            <a href="">Show All</a>
+            <h6 class="mb-0">Penjualan Terbaru</h6>
+            <a href="/sales">Lihat Selengkapnya</a>
           </div>
           <div class="table-responsive">
             <table class="table text-start align-middle table-bordered table-hover mb-0">
@@ -87,54 +87,18 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>01 Jan 2045</td>
-                  <td>INV-0123</td>
-                  <td>Jhon Doe</td>
-                  <td>$123</td>
-                  <td>Paid</td>
-                  <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                </tr>
-                <tr>
-                  <td>01 Jan 2045</td>
-                  <td>INV-0123</td>
-                  <td>Jhon Doe</td>
-                  <td>$123</td>
-                  <td>Paid</td>
-                  <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                </tr>
-                <tr>
-                  <td>01 Jan 2045</td>
-                  <td>INV-0123</td>
-                  <td>Jhon Doe</td>
-                  <td>$123</td>
-                  <td>Paid</td>
-                  <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                </tr>
-                <tr>
-                  <td>01 Jan 2045</td>
-                  <td>INV-0123</td>
-                  <td>Jhon Doe</td>
-                  <td>$123</td>
-                  <td>Paid</td>
-                  <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                </tr>
-                <tr>
-                  <td>01 Jan 2045</td>
-                  <td>INV-0123</td>
-                  <td>Jhon Doe</td>
-                  <td>$123</td>
-                  <td>Paid</td>
-                  <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                </tr>
-                <tr>
-                  <td>01 Jan 2045</td>
-                  <td>INV-0123</td>
-                  <td>Jhon Doe</td>
-                  <td>$123</td>
-                  <td>Paid</td>
-                  <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                </tr>
+                <% if (data.transactions.length > 0){ %>
+                  <% data.transactions.forEach(item => { %>
+                    <tr>
+                      <td><%= helper.formatDate(item.createdAt) %></td>
+                      <td><%= item.transNo %></td>
+                      <td><%= item.recipient %></td>
+                      <td>Rp<%= helper.setCurrency(item.totalPrice) %></td>
+                      <td><%= item.statusOrder %></td>
+                      <td><a class="btn btn-sm btn-primary" href="/sales/detail/<%= item.id %>">Detail</a></td>
+                    </tr>
+                  <% }) %>
+                <% } %>
               </tbody>
             </table>
           </div>

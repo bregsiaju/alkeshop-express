@@ -21,4 +21,8 @@ $ npm start
 
 # access admin page
 $ http://localhost:8000
+
+# admin account
+$ username: admin
+$ password: admin456
 ```

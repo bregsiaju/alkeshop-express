@@ -39,8 +39,9 @@ const addTransaction = async (req, res) => {
         quantity: product.quantity
       })
 
-      const getQTY = await Product.findByPk(product.id)
-      const afterSale = getQTY - product.quantity
+      const getQTY = await Product.findByPk(product.productId)
+      // console.log(getQTY)
+      const afterSale = getQTY.stock - product.quantity
       await Product.update({
         stock: afterSale
       }, { where: { id: product.productId } })

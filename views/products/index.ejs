@@ -1,4 +1,4 @@
-<%- include("./partials/head") %>
+<%- include("../partials/head") %>
 
 <body>
   <div class="container-xxl position-relative bg-white d-flex p-0">
@@ -13,41 +13,61 @@
 
 
     <!-- Sidebar Start -->
-    <%- include("./partials/sidebar") %>
+    <%- include("../partials/sidebar") %>
     <!-- Sidebar End -->
 
 
     <!-- Content Start -->
     <div class="content">
       <!-- Navbar Start -->
-      <%- include("./partials/navbar") %>
+      <%- include("../partials/navbar") %>
       <!-- Navbar End -->
 
+      <!-- alert message -->
+      <div class="container-fluid px-4 pt-4">
+        <%- include ('../partials/alertMessages') %>
+      </div>
+      <!-- end alert message -->
 
       <!-- Recent Sales Start -->
-      <div class="container-fluid pt-4 px-4">
+      <div class="container-fluid pt-2 px-4">
         <div class="bg-light text-center rounded p-4">
           <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">Daftar Kategori</h6>
+            <h6 class="mb-0">Daftar Produk</h6>
+            <a href="/products/add">Tambah Produk</a>
           </div>
           <div class="table-responsive">
             <table class="table text-start align-middle table-bordered table-hover mb-0">
               <thead>
                 <tr class="text-dark">
                   <th scope="col">No</th>
-                  <th scope="col">Nama Kategori</th>
+                  <th scope="col">Nama Produk</th>
+                  <th scope="col">Kategori</th>
+                  <th scope="col">Gambar</th>
+                  <th scope="col">Harga</th>
+                  <th scope="col">Stock</th>
                   <th scope="col">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 <% if (data.length > 0){ %>
-                  <% data.forEach(item => { %>
-                    <tr>
-                      <td><%= item.id %></td>
-                      <td><%= item.categoryName %></td>
-                      <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                    </tr>
-                  <% }) %>
+                <% no = 1 %>
+                <% data.forEach(item => { %>
+                <tr>
+                  <td><%= no++ %></td>
+                  <td><%= item.productName %></td>
+                  <td><%= item.Category.categoryName %></td>
+                  <td><img src="<%= item.productImage %>" width="100"></td>
+                  <td>Rp<%= helper.setCurrency(item.price) %></td>
+                  <td class="no-wrap"><%= item.stock %> pcs</td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <a class="btn btn-sm btn-danger me-1" href="/delete-product/<%= item.id %>">Hapus</a>
+                      <a class="btn btn-sm btn-primary" href="">Detail</a>
+                    </div>
+                  </td>
+                </tr>
+                <% }) %>
                 <% } %>
               </tbody>
             </table>
@@ -76,4 +96,4 @@
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
   </div>
 
-  <%- include("./partials/footer") %>
+  <%- include("../partials/footer") %>

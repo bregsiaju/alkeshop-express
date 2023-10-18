@@ -1,0 +1,128 @@
+<%- include("../partials/head") %>
+
+<body>
+  <div class="container-xxl position-relative bg-white d-flex p-0">
+    <!-- Spinner Start -->
+    <div id="spinner"
+      class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Sidebar Start -->
+    <%- include("../partials/sidebar") %>
+    <!-- Sidebar End -->
+
+
+    <!-- Content Start -->
+    <div class="content">
+      <!-- Navbar Start -->
+      <%- include("../partials/navbar") %>
+      <!-- Navbar End -->
+
+      <% detail = data[0].Transaction %>
+      <% bayar = data[0].Transaction.Payment %>
+
+      <!-- Recent Sales Start -->
+      <div class="container-fluid pt-4 px-4">
+        <div class="bg-light text-center rounded p-4">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Detail Transaksi <%= detail.transNo %></h6>
+          </div>
+          <div>
+            <table class="table table-borderless">
+              <tbody>
+                <tr>
+                  <th scope="row" class="text-start">Nama Penerima</th>
+                  <td>:</td>
+                  <td class="text-start"><%= detail.recipient %></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="text-start">Alamat</th>
+                  <td>:</td>
+                  <td class="text-start"><%= detail.address %>, <%= detail.city %>, <%= detail.country %>,
+                    <%= detail.zipCode %></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="text-start">Metode Pembayaran</th>
+                  <td>:</td>
+                  <td class="text-start"><%= bayar.paymentName %></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="text-start">Status</th>
+                  <td>:</td>
+                  <td class="text-start"><%= detail.statusOrder %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="bg-light text-center rounded p-4 pt-0">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Daftar Produk</h6>
+          </div>
+          <div>
+            <table class="table table-bordered table-primary">
+              <thead>
+                <tr class="text-dark">
+                  <th scope="col">No</th>
+                  <th scope="col">Nama Produk</th>
+                  <th scope="col">Harga</th>
+                  <th scope="col">Jumlah Item</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% no = 1 %>
+                <% data.forEach(item => { %>
+                <tr>
+                  <td><%= no++ %></td>
+                  <td class="text-start"><%= item.Product.productName %></td>
+                  <td class="text-end">Rp<%= helper.setCurrency(item.Product.price) %></td>
+                  <td><%= item.quantity %> pcs</td>
+                </tr>
+                <% }) %>
+                <tr class="fw-bold">
+                  <th colspan="2">Total Pembayaran</th>
+                  <td class="text-end">Rp<%= helper.setCurrency(detail.totalPrice) %></td>
+                  <td><%= detail.totalItems %> pcs</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <% if (detail.statusOrder === 'Diproses') { %>
+        <div class="bg-light rounded p-4 pt-0">
+          <form action="/confirm-shipping/<%= detail.id %>" method="post">
+            <input type="text" value="Dikirim" name="status" class="visually-hidden">
+            <button type="submit" class="btn btn-success">Kirimkan Pesanan</button>
+          </form>
+        </div>
+        <% } %>
+      </div>
+      <!-- Recent Sales End -->
+
+
+      <!-- Footer Start -->
+      <div class="container-fluid pt-4 px-4">
+        <div class="bg-light rounded-top p-4">
+          <div class="row">
+            <div class="col-12 col-sm-6 text-center text-sm-start">
+              &copy; <a href="#">Alkeshop</a>, All Right Reserved.
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Footer End -->
+    </div>
+    <!-- Content End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+  </div>
+
+  <%- include("../partials/footer") %>
